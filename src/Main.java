@@ -21,7 +21,7 @@ import org.jsoup.select.Elements;
 public class Main {
     
     public static DB db = new DB();
-    static String urlToParse = "http://www.surajdubey.com/";
+    static String urlToParse = "";
     public static void main(String args[]) throws SQLException, IOException
     {
         process(urlToParse);
