@@ -9,20 +9,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author suraj
- */
 public class Main {
     
     public static DB db = new DB();
-    static String urlToParse = "http://www.mit.edu";
+    static String urlToParse = "http://www.citypincode.in/ANDHRA_PRADESH/Hyderabad";
     public static void main(String args[]) throws SQLException, IOException
     {
         process(urlToParse);
@@ -55,10 +45,11 @@ public class Main {
             // for each element of ques
             for(Element link:ques)
             {
-                if(link.attr("href").contains("mit.edu"))
+                process(link.attr("abs:href"));
+                /*if(link.attr("href").contains("mit.edu"))
                 {
                     process(link.attr("abs:href"));
-                }
+                }*/
             }
             
             
