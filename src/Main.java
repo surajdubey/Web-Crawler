@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /*
@@ -21,7 +22,7 @@ import org.jsoup.select.Elements;
 public class Main {
     
     public static DB db = new DB();
-    static String urlToParse = "";
+    static String urlToParse = "http://www.mit.edu";
     public static void main(String args[]) throws SQLException, IOException
     {
         process(urlToParse);
@@ -32,8 +33,7 @@ public class Main {
         String sql = "select * from Record where URL = '"+URL+"'";
         ResultSet rs = db.runExecuteQuery(sql);
         
-        //if(!rs.next())//new Url found
-        if(true)
+        if(!rs.next())//new Url found
         {
             //store the URL to database to avoid parsing again
             sql = "INSERT INTO  `crawler`.`Record` " + "(`URL`) VALUES " + "(?);";
@@ -44,9 +44,24 @@ public class Main {
             //get info required
             
             Document doc = Jsoup.connect(urlToParse).get();
-            Elements body = doc.select("a[href]");
+            //Elements body = doc.select("a[href]");
             //System.out.println(doc.text());
-            System.out.println(body.text());
+            //System.out.println(body.text());
+            System.out.println(URL);
+            //get all links and recursively call the processPage method
+            
+            Elements ques = doc.select("a[href]");
+            
+            // for each element of ques
+            for(Element link:ques)
+            {
+                if(link.attr("href").contains("mit.edu"))
+                {
+                    process(link.attr("abs:href"));
+                }
+            }
+            
+            
         }
     }
     
