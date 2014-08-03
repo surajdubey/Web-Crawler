@@ -1,18 +1,15 @@
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Main {
     
     public static DB db = new DB();
-    static String urlToParse = "http://www.citypincode.in/ANDHRA_PRADESH/Hyderabad";
+    static String urlToParse = "http://www.mapsofindia.com/pincode/india/andhra-pradesh/hyderabad/";
     public static void main(String args[]) throws SQLException, IOException
     {
         process(urlToParse);
@@ -20,39 +17,42 @@ public class Main {
     
     public static void process(String URL) throws SQLException, IOException
     {
-        String sql = "select * from Record where URL = '"+URL+"'";
-        ResultSet rs = db.runExecuteQuery(sql);
+        Document doc = Jsoup.connect(urlToParse).get();
+        Elements body = doc.select("table>tbody>tr>td");
+
+        String result = body.text();
+        String text[] = result.split(" ");
         
-        if(!rs.next())//new Url found
+        for(String r:text)
         {
-            //store the URL to database to avoid parsing again
-            sql = "INSERT INTO  `crawler`.`Record` " + "(`URL`) VALUES " + "(?);";
-            PreparedStatement stmt = db.conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, URL);
-            stmt.execute();
-            
-            //get info required
-            
-            Document doc = Jsoup.connect(urlToParse).get();
-            //Elements body = doc.select("a[href]");
-            //System.out.println(doc.text());
-            //System.out.println(body.text());
-            System.out.println(URL);
-            //get all links and recursively call the processPage method
-            
-            Elements ques = doc.select("a[href]");
-            
-            // for each element of ques
-            for(Element link:ques)
+            if(r.length() == 6 && isPinCode(r))
             {
-                process(link.attr("abs:href"));
-                /*if(link.attr("href").contains("mit.edu"))
+                try{
+                String sql = "INSERT INTO PinCodeList(pincode) VALUES('"+r+"')"; 
+                db.runExecuteUpdate(sql);
+                System.out.println("New Pin Code "+r);
+                
+                }
+                catch(SQLException e)
                 {
-                    process(link.attr("abs:href"));
-                }*/
+                    //duplicate entry
+                }
             }
-            
-            
+        }
+
+        
+    }
+    
+    static boolean isPinCode(String str)
+    {
+        try{
+           
+            Integer.parseInt(str);
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
         }
     }
     
