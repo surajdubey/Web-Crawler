@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 public class Main {
     
     public static DB db = new DB();
-    static String urlToParse = "http://www.mapsofindia.com/pincode/india/andhra-pradesh/hyderabad/";
+    static String urlToParse = "https://www.jabong.com/onecheckout/widget/lookup/postcode/401107/?YII_CSRF_TOKEN=30fb4044ea1cb2352cd23e0b5e41e2b56055fd8c";
     public static void main(String args[]) throws SQLException, IOException
     {
         process(urlToParse);
@@ -17,11 +17,13 @@ public class Main {
     
     public static void process(String URL) throws SQLException, IOException
     {
+        System.setProperty("javax.net.ssl.trustStore", "/home/suraj/Desktop/work/truestore/www.jabang.com.jks");
         Document doc = Jsoup.connect(urlToParse).get();
-        Elements body = doc.select("table>tbody>tr>td");
-
+        Elements body = doc.select("body");
+        
         String result = body.text();
-        String text[] = result.split(" ");
+        System.out.println(result);
+        /*String text[] = result.split(" ");
         
         for(String r:text)
         {
@@ -38,11 +40,11 @@ public class Main {
                     //duplicate entry
                 }
             }
-        }
+        }*/
 
         
     }
-    
+    /*
     static boolean isPinCode(String str)
     {
         try{
@@ -55,5 +57,5 @@ public class Main {
             return false;
         }
     }
-    
+    */
 }
