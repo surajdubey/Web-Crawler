@@ -22,7 +22,7 @@ import org.jsoup.select.Elements;
 public class Main {
     
     public static DB db = new DB();
-    static String urlToParse = "http://www.asklaila.com/Hyderabad-Locality-Guides";
+    static String urlToParse = "http://www.asklaila.com/Hyderabad-Locality-Guides?pn=3";
     static String tempUrl = urlToParse;
     public static void main(String args[]) throws SQLException, IOException
     {
