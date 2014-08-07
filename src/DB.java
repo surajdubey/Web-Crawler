@@ -7,11 +7,13 @@ import java.sql.Statement;
 
 class DB {
     
-    String URL = "jdbc:mysql://localhost:3306/servesy";
+    //String URL = "jdbc:mysql://localhost:3306/servesy";
+    String URL = "jdbc:mysql://localhost:3306/crawler";
+    
     String username = "root";
     String password = "123456";
 
-    private static Connection conn = null;
+    static Connection conn = null;
     private static Statement stmt = null;
     private static ResultSet rs = null;
     static String tableName = "PinCodeList";
